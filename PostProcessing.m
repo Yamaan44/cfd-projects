@@ -30,57 +30,83 @@
 %     end
 % end
 
+%% Colour definitions
+cobalt=[19/255,56/255,189/255]; %2500
+arctic=[130/255,237/255,253/255]; %2200
+butter=[254/255,226/255,39/255]; %2000
+butterscotch=[252/255,188/255,2/255]; %1800
+tiger=[252/255,107/255,2/255]; %1500
+carrot=[237/255,113/255,23/255]; %1200
+rosered=[226/255,37/255,43/255]; %1000
+candy=[210/255,21/255,2/255]; %800
+blood=[113/255,12/255,4/255]; %500
+grey=[108/255,98/255,109/255]; %300
+
+lo=[0; 0; 0]';
+hi=[255; 255; 255]';
+
+map = [cobalt; arctic; butter; butterscotch; tiger; carrot; grey ;rosered; candy; blood];
+map = flipud(map);
+
+%clev=[150; 400; 500; 800; 1000; 1200; 1500; 1800; 2000; 2200];
+%clev=[150; 200; 250; 300; 350; 400; 500; 800; 1200; 2200];
+clev=[150; 200; 250; 297; 303; 350; 400; 500; 800; 1200; 2200];
+
+
+cmap=map;
 %% Visualizer
 
-sSuffix='.mat';
-iFileStart=5;
-iFileEnd=1140;
-sPath='/Users/YA1/Documents/MATLAB/MAE 6230/Particle-Laden Jet Solver/Re_1000_St_100/';
-sPrefix='phiParticles_Re_1000_St_100Iter_';
+sSuffix='00.mat';
+iFileStart=1;
+iFileEnd=250;
+sPath='/Users/YA1/Documents/MATLAB/MAE 6230/LES Turbulence Solver/Outputs_Re_10000/';
+sPrefix='phi_Re_10000Iter_';
 
 h=figure()
-Vx=linspace(0,2*H,nx);
-Vy=linspace(-0.5*H,0.5*H,ny);
+Vx=linspace(0,25*H,nx);
+Vy=linspace(-2.5*H,2.5*H,ny);
 [X,Y] = meshgrid(Vx,Vy);
 
 i=iFileStart;
-sName=num2str(i,'%05d');
+sName=num2str(i,'%03d');
 fname=[sPath sPrefix sName sSuffix]
 load(fname);
 time=t(find(t,1,'last'));
 
 
 contourf(X,Y,phi',40,'LineStyle','none')
+%colormap(map)
+%caxis([0 2500])
+%h=contourfcmap(X,Y,T',clev,cmap,lo,hi);
+
 set(gca,'fontsize',18)
 axis image
 axis equal
 axis xy
-hold on 
-plot(part_data(:,1),part_data(:,2),'ro')
-hold off
-
 xlabel('$x/H$','Interpreter','Latex','FontSize',18)
 ylabel('$y/H$','Interpreter','Latex','FontSize',18)
 title(['tU/H = ' num2str(time,'%2d')],'Interpreter','Latex','FontSize',18)
 drawnow
-gif('ParticleSimulationRe1000St100.gif','DelayTime',0.1,'LoopCount',5,'frame',gcf)
+gif('LESSimulationRe10000.gif','DelayTime',0.1,'LoopCount',5,'frame',gcf)
 
-for i=iFileStart:5:iFileEnd
-   sName=num2str(i,'%05d');
+for i=iFileStart+1:iFileEnd
+   sName=num2str(i,'%03d');
    fname=[sPath sPrefix sName sSuffix]
    load(fname);
    time=t(find(t,1,'last'));
    
    
    contourf(X,Y,phi',40,'LineStyle','none')
+   %colormap(map)
+   %caxis([0 2500])
+   %h=contourfcmap(X,Y,T',clev,cmap,lo,hi); %use this for better color but
+   %with lines
+
    set(gca,'fontsize',18)
    %colorbar
    axis image
    axis equal
    axis xy
-   hold on
-   plot(part_data(:,1),part_data(:,2),'ro')
-   hold off
    xlabel('$x/H$','Interpreter','Latex','FontSize',18)
    ylabel('$y/H$','Interpreter','Latex','FontSize',18)
    title(['$tU/H = $' num2str(time,'%3d')],'Interpreter','Latex','FontSize',18)
