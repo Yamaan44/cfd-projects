@@ -1,4 +1,4 @@
-clear %%THIS USES CG
+clear %%THIS USES CG - LES Solver
 %% Constants CHECKED
 Re=10000; %20 and 400 
 H=1; 
